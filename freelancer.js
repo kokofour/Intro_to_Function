@@ -52,8 +52,7 @@ export function dayRate(ratePerHour) {
     let numberOfMonths = Math.floor (numDays / 22); // 230/22 = 10
     let monthlyRate = 22 * dayRate(ratePerHour);
     let monthtlyDiscountRate = monthlyRate * (1- 0.42);
-  
     let numExtraDays = numDays % 22;
-    let numExtraDays = numExtraDays * dayRate(ratePerHour);
+    let extraDaysRate = numExtraDays * dayRate(ratePerHour);
+   return Math.ceil(numberOfMonths * monthlyDiscountRate + ExtraDaysrate)
   }
-  
