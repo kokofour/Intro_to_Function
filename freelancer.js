@@ -18,7 +18,7 @@
 // in idiomatic JavaScript, but some companies and style-guides do enforce them.
 //
 // Get those rates calculated!
-
+export const NUMBER_OF_HOURS_PER_DAY = 8;
 /**
  * The day rate, given a rate per hour
  *
@@ -26,33 +26,39 @@
  * @returns {number} the rate per day
  */
 export function dayRate(ratePerHour) {
-    return ratePerHour*8;
-  }
-  
-  /**
-   * Calculates the number of days in a budget, rounded down
-   *
-   * @param {number} budget: the total budget
-   * @param {number} ratePerHour: the rate per hour
-   * @returns {number} the number of days
-   */
-  export function daysInBudget(budget, ratePerHour) {
-    return Math.floor(budget / dayRate(ratePerHour));
-  }
-  
-  /**
-   * Calculates the discounted rate for large projects, rounded up
-   *
-   * @param {number} ratePerHour
-   * @param {number} numDays: number of days the project spans
-   * @param {number} discount: for example 20% written as 0.2
-   * @returns {number} the rounded up discounted rate
-   */
-  export function priceWithMonthlyDiscount(ratePerHour, numDays, discount) {
-    let numberOfMonths = Math.floor (numDays / 22); // 230/22 = 10
-    let monthlyRate = 22 * dayRate(ratePerHour);
-    let monthtlyDiscountRate = monthlyRate * (1- 0.42);
-    let numExtraDays = numDays % 22;
-    let extraDaysRate = numExtraDays * dayRate(ratePerHour);
-   return Math.ceil(numberOfMonths * monthlyDiscountRate + ExtraDaysrate)
-  }
+  return ratePerHour * NUMBER_OF_HOURS_PER_DAY;
+}
+
+/**
+ * Calculates the number of days in a budget, rounded down
+ *
+ * @param {number} budget: the total budget
+ * @param {number} ratePerHour: the rate per hour
+ * @returns {number} the number of days
+ */
+export function daysInBudget(budget, ratePerHour) {
+  return Math.floor(budget / (ratePerHour * NUMBER_OF_HOURS_PER_DAY));
+  throw new Error('Implement the daysInBudget function');
+}
+
+/**
+ * Calculates the discounted rate for large projects, rounded up
+ *
+ * @param {number} ratePerHour
+ * @param {number} numDays: number of days the project spans
+ * @param {number} discount: for example 20% written as 0.2
+ * @returns {number} the rounded up discounted rate
+ */
+
+export function priceWithMonthlyDiscount(ratePerHour, numDays, discount) {
+  const BILLABLE_DAYS = 22; 
+  let ratePerDay = ratePerHour * NUMBER_OF_HOURS_PER_DAY;
+  let daysLeftAfterMonths = numDays % BILLABLE_DAYS ;
+  let numMonthsWithDiscount = Math.floor(numDays / BILLABLE_DAYS );
+  let pricePerMonth = ratePerDay * BILLABLE_DAYS ;
+  let priceDiscountedRatePerMonth = pricePerMonth * discount;
+  let totalDiscountedRates = (pricePerMonth - priceDiscountedRatePerMonth) * numMonthsWithDiscount;
+  let total = totalDiscountedRates + (ratePerDay * daysLeftAfterMonths);
+  return Math.ceil(total);
+  throw new Error('Implement the priceWithMonthlyDiscount function');
+}
